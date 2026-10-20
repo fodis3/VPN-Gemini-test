@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class, androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
 
 package ru.vpngemini.android

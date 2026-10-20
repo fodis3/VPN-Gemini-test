@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Fetch pinned, upstream Android executables. No Windows binaries are used."""
 import concurrent.futures
 import hashlib

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Local Windows-core diagnostic. Read a share URI from stdin; never print/save it."""
 from pathlib import Path
 import http.client

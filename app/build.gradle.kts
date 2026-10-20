@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.plugin.compose") }
 android {
     namespace = "ru.vpngemini.android"
@@ -6,9 +7,26 @@ android {
         applicationId = "ru.vpngemini.android"
         minSdk = 26
         targetSdk = 36
-        versionCode = 40005
-        versionName = "4.0.5"
+        versionCode = 40006
+        versionName = "4.0.6"
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
+    }
+    signingConfigs {
+        val keystorePath = providers.environmentVariable("VPN_GEMINI_KEYSTORE").orNull
+        if (!keystorePath.isNullOrBlank()) {
+            create("distribution") {
+                storeFile = file(keystorePath)
+                storePassword = providers.environmentVariable("VPN_GEMINI_STORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("VPN_GEMINI_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("VPN_GEMINI_KEY_PASSWORD").get()
+            }
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.findByName("distribution")
+            isMinifyEnabled = false
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }

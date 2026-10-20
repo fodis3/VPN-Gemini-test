@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
 buildscript { dependencies { classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.20") } }
 plugins {
     id("com.android.application") version "9.2.1" apply false
