@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Check APK payload and package source separately from local SDK/build caches."""
+import os
+import subprocess
 import argparse
 import re
 import hashlib
@@ -25,14 +27,22 @@ for report in results.glob('TEST-*.xml'):
     count += int(suite.get('tests'))
 with zipfile.ZipFile(apk) as z:
     assert z.testzip() is None
-    if args.variant == 'release':
-        assert any(p.startswith('META-INF/') and p.endswith('.RSA') for p in z.namelist()), 'Release APK must be signed'
     for core in json.loads((root / 'cores.lock.json').read_text(encoding='utf-8')):
         binary = z.read(f"lib/{core['abi']}/lib{core['engine']}.so")
         assert hashlib.sha256(binary).hexdigest() == core['binary_sha256']
     for name in ['VPN-Gemini.txt', 'Xray-MPL-2.0.txt', 'sing-box-notice.txt', 'GPL-3.0.txt', 'SOURCES.txt']:
         assert len(z.read('assets/licenses/' + name)) > 100
     assert 'classes.dex' in z.namelist()
+
+if args.variant == 'release':
+    sdk_path = os.environ.get('ANDROID_HOME') or os.environ.get('ANDROID_SDK_ROOT')
+    if not sdk_path:
+        raise RuntimeError('Set ANDROID_HOME to verify the release signature with apksigner')
+    executable = 'apksigner.bat' if os.name == 'nt' else 'apksigner'
+    signers = sorted((Path(sdk_path) / 'build-tools').glob('*/' + executable))
+    if not signers:
+        raise RuntimeError('Android SDK apksigner not found')
+    subprocess.run([str(signers[-1]), 'verify', str(apk)], check=True)
 
 preview = root / 'preview'
 preview.mkdir(exist_ok=True)

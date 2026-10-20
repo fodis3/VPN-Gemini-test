@@ -60,8 +60,8 @@ TLS через SOCKS, политику QUIC и интерфейс в Robolectric
 
 После сборки и тестов `python tools/package_build.py --variant release`
 проверяет хеши ядер и лицензии в APK и создаёт APK, исходный ZIP и SHA-256
-в родительском каталоге проекта. Этот скрипт не заменяет проверку подписи
-через Android SDK `apksigner verify --print-certs`.
+в родительском каталоге проекта. Для release также вызывается `apksigner verify` (нужен `ANDROID_HOME`).
+Отпечаток сертификата можно посмотреть через `apksigner verify --print-certs`.
 
 Официальный sing-box executable имеет ELF alignment 4 КБ, Xray — 16 КБ.
 Работа sing-box на устройствах со страницами памяти 16 КБ отдельно не
