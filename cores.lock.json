@@ -1,0 +1,30 @@
+[
+  {
+    "abi": "arm64-v8a",
+    "engine": "xray",
+    "url": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-android-arm64-v8a.zip",
+    "archive_sha256": "57149ffd48b629c07bf76938e73ab2729fde5910091497eab3e93d1c190f4c1b",
+    "binary_sha256": "19101a8191d6d606da975f719c8cdb80b8710b87ab17edc00ef74b9e39588714"
+  },
+  {
+    "abi": "arm64-v8a",
+    "engine": "singbox",
+    "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-android-arm64.tar.gz",
+    "archive_sha256": "149569b5dbf01958e6598beb3a13078d6fc0e353ef06f4aff85f5f28bc23593b",
+    "binary_sha256": "64324301d1049474f6010b5a015d3143271a8df83bae83ae8814167ac8f74f5a"
+  },
+  {
+    "abi": "x86_64",
+    "engine": "xray",
+    "url": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-android-amd64.zip",
+    "archive_sha256": "bfa1dd4cb3cd94f92af6c718ac6933cc84bd3ddd8343aa1e413162152930bee5",
+    "binary_sha256": "26b2ac1e596242847a247df9e932ac480bf6072c5c686517f5a3017320895814"
+  },
+  {
+    "abi": "x86_64",
+    "engine": "singbox",
+    "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-android-amd64.tar.gz",
+    "archive_sha256": "a84a5aea86ad0588b76e23051e9e59405a7ed52358acfb9710cfaa055fe60e4a",
+    "binary_sha256": "25f975c79ea43cafdcf91edfa423cda6ed6d412bc82ca880d458cd1e60f490c5"
+  }
+]

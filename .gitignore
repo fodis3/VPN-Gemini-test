@@ -1,0 +1,13 @@
+.gradle/
+.kotlin/
+local.properties
+**/build/
+.downloads/
+*.log
+
+# Downloaded cores and private signing material
+**/jniLibs/
+__pycache__/
+*.jks
+*.keystore
+keystore.properties

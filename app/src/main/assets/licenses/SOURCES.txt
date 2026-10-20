@@ -1,0 +1,9 @@
+Unmodified upstream Android executables, launched as separate processes.
+Xray-core v26.3.27, MPL-2.0
+Source: https://github.com/XTLS/Xray-core/archive/refs/tags/v26.3.27.tar.gz
+Build instructions: https://github.com/XTLS/Xray-core/tree/v26.3.27
+sing-box v1.14.3, GPL-3.0-or-later
+Source: https://github.com/SagerNet/sing-box/archive/refs/tags/v1.14.3.tar.gz
+Build instructions: https://github.com/SagerNet/sing-box/tree/v1.14.3
+AndroidX / Jetpack Compose, OkHttp and Kotlin: Apache-2.0.
+Exact Gradle dependencies are pinned in app/build.gradle.kts.
