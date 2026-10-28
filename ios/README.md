@@ -159,3 +159,7 @@ UI-тесты проверяют импорт, вкладки, настройк�
 Скриншоты реального симулятора iOS 18.5:
 
 <p><img src="preview/ios18/01-check.png" width="240" alt="Проверка, iOS 18.5"><img src="preview/ios18/05-dark-check.png" width="240" alt="Тёмная тема, iOS 18.5"></p>
+
+Liquid Glass на реальном симуляторе iOS 26:
+
+<p><img src="preview/ios26/01-check.png" width="240" alt="iOS 26, главный экран"><img src="preview/ios26/05-dark-check.png" width="240" alt="iOS 26, тёмная тема"></p>

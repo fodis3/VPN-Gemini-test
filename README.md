@@ -95,6 +95,14 @@ AndroidX, Kotlin и OkHttp — Apache-2.0.
   <img src="preview/settings-dark.png" width="240" alt="Android: настройки в тёмной теме">
 </p>
 
+### iPhone · iOS 26 · Liquid Glass
+
+<p>
+  <img src="ios/preview/ios26/01-check.png" width="240" alt="iOS 26: Liquid Glass, главный экран">
+  <img src="ios/preview/ios26/05-dark-check.png" width="240" alt="iOS 26: Liquid Glass, тёмная тема">
+  <img src="ios/preview/ios26/03-settings.png" width="240" alt="iOS 26: настройки">
+</p>
+
 ### iPhone · iOS 18.5
 
 <p>
