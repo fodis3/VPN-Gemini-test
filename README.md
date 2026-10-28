@@ -70,7 +70,6 @@ EXE не подписан сертификатом издателя. В x86 ис
   [Сборка и подпись](docs/BUILDING.md).
 - **iOS:** каталог [`ios/`](ios), SwiftUI и единый Go-модуль с Xray / sing-box.
   [Документация](ios/README.md), [проверка сборки](ios/VERIFICATION.md).
-  [Отдельный репозиторий со сборкой GitHub Actions](https://github.com/fodis3/test-vpn-ios).
 - **Windows:** каталог [`windows/`](windows), Python, PySide6 / PySide2.
   [Сборка и запуск](windows/README.md).
 

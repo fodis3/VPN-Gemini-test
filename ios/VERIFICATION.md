@@ -2,7 +2,7 @@
 
 20.10.2026 · исходники приложения: `98d946e4e6a1c1499366a4d102a93b66e1cba43f`.
 
-**[Успешная сборка и тесты GitHub Actions](https://github.com/fodis3/test-vpn-ios/actions/runs/39403513109).**
+Сборка и тесты GitHub Actions выполнены успешно.
 
 - macOS 26, Xcode 26.6, архив для arm64 iPhone/iPad, минимум iOS 26.0.
 - Метаданные IPA: `ru.vpngemini.ios`, версия `4.0.0`, build `40000`.
