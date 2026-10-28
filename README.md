@@ -85,8 +85,28 @@ AndroidX, Kotlin и OkHttp — Apache-2.0.
 
 Независимый проект, не связанный с Google. Gemini — продукт Google.
 
-## Интерфейс на iOS 18.5
+## Скриншоты
 
-Реальные скриншоты симулятора:
+### Android · Material 3 Expressive
 
-<p><img src="ios/preview/ios18/01-check.png" width="240" alt="Главный экран, iOS 18.5"><img src="ios/preview/ios18/05-dark-check.png" width="240" alt="Тёмная тема, iOS 18.5"><img src="ios/preview/ios18/03-settings.png" width="240" alt="Настройки, iOS 18.5"></p>
+<p>
+  <img src="preview/home-light.png" width="240" alt="Android: главный экран">
+  <img src="preview/results.png" width="240" alt="Android: список конфигураций">
+  <img src="preview/settings-dark.png" width="240" alt="Android: настройки в тёмной теме">
+</p>
+
+### iPhone · iOS 18.5
+
+<p>
+  <img src="ios/preview/ios18/01-check.png" width="240" alt="iOS 18.5: главный экран">
+  <img src="ios/preview/ios18/05-dark-check.png" width="240" alt="iOS 18.5: тёмная тема">
+  <img src="ios/preview/ios18/03-settings.png" width="240" alt="iOS 18.5: настройки">
+</p>
+
+### Windows · Fluent Design
+
+<p><img src="windows/preview/main-light.png" width="900" alt="Windows: светлая тема"></p>
+<p><img src="windows/preview/main-dark.png" width="900" alt="Windows: тёмная тема"></p>
+
+Это снимки интерфейса из проверок Compose/Qt и симулятора iOS.
+Серверы и результаты на демонстрационных экранах — тестовые данные.

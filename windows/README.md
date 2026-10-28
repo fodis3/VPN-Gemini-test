@@ -45,3 +45,11 @@ CSV содержит исходные конфигурации; храните �
 используют слой `v4/qt_compat`; настройки, темы и анимации сохраняются.
 Ядра загружаются в `bin/x86` и `bin/x64`, их SHA-256 закреплены в `cores.lock.json`.
 PySide2 / Qt 5.15 сохраняют LGPL-лицензию; исходники: https://code.qt.io/cgit/pyside/pyside-setup.git/?h=5.15.2 и https://code.qt.io/cgit/qt/qtbase.git/?h=5.15.2 .
+
+## Интерфейс
+
+![Светлая тема](preview/main-light.png)
+
+![Тёмная тема](preview/main-dark.png)
+
+Демонстрационные серверы и результаты — тестовые данные.

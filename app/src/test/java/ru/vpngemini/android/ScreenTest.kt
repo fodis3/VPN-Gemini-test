@@ -102,6 +102,9 @@ class ScreenTest {
         compose.onNodeWithTag("check-progress").assertRangeInfoEquals(ProgressBarRangeInfo(1f, 0f..1f))
     }
     private fun capture(name: String) {
+        // Let transient snackbars and navigation motion finish before documentation captures.
+        compose.mainClock.advanceTimeBy(6000)
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idleFor(6, java.util.concurrent.TimeUnit.SECONDS)
         compose.waitForIdle()
         val directory = File("build/screenshots").apply { mkdirs() }
         compose.runOnIdle {
