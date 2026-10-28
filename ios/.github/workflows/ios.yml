@@ -1,0 +1,103 @@
+name: Build iOS IPA
+on:
+  push:
+    branches: [main]
+    paths: ['App/**', 'engine/**', 'Tests/**', 'scripts/**', 'project.yml', 'LICENSE', '.github/workflows/**']
+  workflow_dispatch:
+    inputs:
+      signed:
+        description: 'Sign with the Apple certificate and provisioning profile stored in repository secrets'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: ios-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'push' }}
+jobs:
+  ios:
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.8'
+          cache-dependency-path: engine/go.sum
+      - name: Check Xcode
+        run: xcodebuild -version && xcrun --sdk iphoneos --show-sdk-version
+      - name: Install project generator
+        run: brew install xcodegen
+      - name: Test native engine
+        working-directory: engine
+        run: go test -tags=with_quic,with_utls -count=1 ./...
+      - uses: actions/cache/restore@v4
+        id: core-cache
+        with:
+          path: Frameworks/GeminiCore.xcframework
+          key: ios-core-v1-${{ runner.arch }}-${{ hashFiles('engine/go.sum', 'engine/**/*.go', '!engine/**/*_test.go', 'scripts/build-core.sh') }}
+      - name: Build single-runtime native framework
+        if: steps.core-cache.outputs.cache-hit != 'true'
+        run: bash scripts/build-core.sh
+      - uses: actions/cache/save@v4
+        if: steps.core-cache.outputs.cache-hit != 'true'
+        with:
+          path: Frameworks/GeminiCore.xcframework
+          key: ios-core-v1-${{ runner.arch }}-${{ hashFiles('engine/go.sum', 'engine/**/*.go', '!engine/**/*_test.go', 'scripts/build-core.sh') }}
+      - name: Generate Xcode project
+        run: python3 scripts/notices.py && xcodegen generate
+      - name: Build unsigned archive
+        run: |
+          xcodebuild archive -project VPNGemini.xcodeproj -scheme VPNGemini \
+            -destination 'generic/platform=iOS' -archivePath build/VPNGemini.xcarchive \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          python3 - <<'PY'
+          import plistlib
+          p=plistlib.load(open('build/VPNGemini.xcarchive/Products/Applications/VPNGemini.app/Info.plist','rb'))
+          assert p['CFBundleIdentifier']=='ru.vpngemini.ios'
+          assert p['CFBundleShortVersionString']=='4.0.0'
+          assert p['CFBundleVersion']=='40000'
+          print('Verified bundle version 4.0.0 (40000)')
+          PY
+          mkdir -p build/unsigned/Payload
+          cp -R build/VPNGemini.xcarchive/Products/Applications/VPNGemini.app build/unsigned/Payload/
+          cd build/unsigned
+          zip -qr ../VPN-Gemini-iOS-4.0.0-unsigned.ipa Payload
+      - name: Select simulator
+        id: simulator
+        run: |
+          python3 - <<'PY'
+          import json,subprocess,os
+          devices=json.loads(subprocess.check_output(['xcrun','simctl','list','devices','available','--json']))['devices']
+          iphones=[d for runtime,items in devices.items() if 'iOS-26' in runtime for d in items if d['name'].startswith('iPhone')]
+          if not iphones: raise SystemExit('No iOS 26 iPhone simulator installed')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('id='+iphones[0]['udid']+'\n')
+          PY
+      - name: Verify native interface on simulator
+        run: |
+          xcodebuild test -project VPNGemini.xcodeproj -scheme VPNGemini \
+            -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}' \
+            -resultBundlePath build/UITests.xcresult CODE_SIGNING_ALLOWED=NO
+      - name: Export screenshots
+        if: always()
+        run: |
+          if [ -d build/UITests.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/UITests.xcresult --output-path build/screenshots
+          fi
+      - name: Sign archive (optional)
+        if: github.event_name == 'workflow_dispatch' && inputs.signed
+        env:
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_PROFILE_BASE64: ${{ secrets.APPLE_PROFILE_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: bash scripts/sign.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: VPN-Gemini-iOS-4.0.0
+          path: |
+            build/*.ipa
+            build/screenshots/
+            build/UITests.xcresult/
+          if-no-files-found: warn

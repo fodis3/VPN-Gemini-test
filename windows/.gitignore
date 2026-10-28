@@ -1,0 +1,7 @@
+bin/
+artifacts/
+build/
+dist/
+__pycache__/
+*.exe
+*.spec

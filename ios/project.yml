@@ -1,0 +1,63 @@
+name: VPNGemini
+options:
+  bundleIdPrefix: ru.vpngemini
+  deploymentTarget:
+    iOS: '26.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    MARKETING_VERSION: '4.0.0'
+    CURRENT_PROJECT_VERSION: '40000'
+    IPHONEOS_DEPLOYMENT_TARGET: '26.0'
+    TARGETED_DEVICE_FAMILY: '1,2'
+    GENERATE_INFOPLIST_FILE: NO
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+targets:
+  VPNGemini:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: VPN Gemini
+        CFBundleShortVersionString: '$(MARKETING_VERSION)'
+        CFBundleVersion: '$(CURRENT_PROJECT_VERSION)'
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ru.vpngemini.ios
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        OTHER_LDFLAGS: '$(inherited) -ObjC -lresolv -framework Security -framework SystemConfiguration -framework CoreFoundation -framework CFNetwork -framework Network'
+    dependencies:
+      - framework: Frameworks/GeminiCore.xcframework
+        embed: false
+  VPNGeminiUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: Tests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: ru.vpngemini.ios.uitests
+        TEST_TARGET_NAME: VPNGemini
+    dependencies:
+      - target: VPNGemini
+schemes:
+  VPNGemini:
+    build:
+      targets:
+        VPNGemini: all
+        VPNGeminiUITests: [test]
+    test:
+      targets: [VPNGeminiUITests]
+      gatherCoverageData: false
