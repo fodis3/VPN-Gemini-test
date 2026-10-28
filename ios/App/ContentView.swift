@@ -5,13 +5,13 @@ struct ContentView: View {
     var body: some View {
         @Bindable var store = store
         TabView(selection: $store.selectedTab) {
-            Tab("Проверка", systemImage: "shield.lefthalf.filled", value: AppTab.check) { CheckView() }
-            Tab("Результаты", systemImage: "checklist", value: AppTab.results) { ResultsView() }
+            CheckView().tabItem { Label("Проверка", systemImage: "shield.lefthalf.filled") }.tag(AppTab.check)
+            ResultsView().tabItem { Label("Результаты", systemImage: "checklist") }.tag(AppTab.results)
                 .badge(store.results.count)
-            Tab("Журнал", systemImage: "text.alignleft", value: AppTab.journal) { JournalView() }
-            Tab("Настройки", systemImage: "slider.horizontal.3", value: AppTab.settings) { SettingsView() }
+            JournalView().tabItem { Label("Журнал", systemImage: "text.alignleft") }.tag(AppTab.journal)
+            SettingsView().tabItem { Label("Настройки", systemImage: "slider.horizontal.3") }.tag(AppTab.settings)
         }
-        .tabBarMinimizeBehavior(.onScrollDown)
+        .adaptiveTabBehavior()
         .onChange(of: store.selectedTab) { _, _ in store.feedback() }
     }
 }
@@ -56,24 +56,7 @@ struct CheckView: View {
                     }.font(.footnote).foregroundStyle(.secondary)
                 }.padding(24)
             }
-            .safeAreaBar(edge: .bottom) {
-            GlassEffectContainer(spacing: 14) {
-                VStack(spacing: 14) {
-                    Button {
-                        if store.running { store.stop() } else { store.start() }
-                    } label: {
-                        Label(store.running ? "Остановить проверку" : "Проверить Gemini", systemImage: store.running ? "stop.fill" : "play.fill")
-                            .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 8)
-                    }
-                    .buttonStyle(.glassProminent).controlSize(.large)
-                    .disabled(store.results.isEmpty && !store.running)
-                    Button { importing = true; store.feedback() } label: {
-                        Label("Добавить конфигурации", systemImage: "plus").frame(maxWidth: .infinity).padding(.vertical, 6)
-                    }.buttonStyle(.glass).controlSize(.large).disabled(store.running)
-                }
-            }
-                .padding(.horizontal, 24).padding(.vertical, 12)
-            }
+            .adaptiveBottomBar { actions.padding(.horizontal, 24).padding(.vertical, 12) }
             .navigationTitle("Проверка")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -89,6 +72,37 @@ struct CheckView: View {
             .sheet(isPresented: $importing) { ImportView() }
         }
     }
+    @ViewBuilder private var actions: some View {
+        if #available(iOS 26.0, *) {
+            GlassEffectContainer(spacing: 14) {
+                VStack(spacing: 14) {
+                    startButton.buttonStyle(.glassProminent)
+                    importButton.buttonStyle(.glass)
+                }
+            }
+        } else {
+            VStack(spacing: 14) {
+                startButton.buttonStyle(.borderedProminent)
+                importButton.buttonStyle(.bordered)
+            }
+        }
+    }
+    private var startButton: some View {
+        Button {
+            if store.running { store.stop() } else { store.start() }
+        } label: {
+            Label(store.running ? "Остановить проверку" : "Проверить Gemini", systemImage: store.running ? "stop.fill" : "play.fill")
+                .font(.headline).frame(maxWidth: .infinity).padding(.vertical, 8)
+        }
+        .controlSize(.large).disabled(store.results.isEmpty && !store.running)
+    }
+    private var importButton: some View {
+        Button { importing = true; store.feedback() } label: {
+            Label("Добавить конфигурации", systemImage: "plus").frame(maxWidth: .infinity).padding(.vertical, 6)
+        }
+        .controlSize(.large).disabled(store.running)
+    }
+
 }
 
 struct MetricTile: View {

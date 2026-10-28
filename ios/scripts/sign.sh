@@ -36,4 +36,4 @@ xcodebuild archive -project VPNGemini.xcodeproj -scheme VPNGemini \
   CODE_SIGNING_ALLOWED=YES CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
   PROVISIONING_PROFILE_SPECIFIER="$profileID" CODE_SIGN_IDENTITY="$identity"
 xcodebuild -exportArchive -archivePath build/Signed.xcarchive -exportPath build/signed -exportOptionsPlist build/ExportOptions.plist
-cp build/signed/*.ipa build/VPN-Gemini-iOS-4.0.0-signed.ipa
+cp build/signed/*.ipa build/VPN-Gemini-iOS-4.0.1-signed.ipa

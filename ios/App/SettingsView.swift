@@ -14,9 +14,10 @@ struct SettingsView: View {
                     Picker("Тема", selection: $store.appearance) { Text("Системная").tag(0); Text("Светлая").tag(1); Text("Тёмная").tag(2) }
                         .accessibilityIdentifier("appearancePicker")
                     Toggle("Тактильный отклик", isOn: $store.haptics)
+                        .accessibilityIdentifier("hapticsToggle")
                 }
                 Section("О приложении") {
-                    LabeledContent("VPN Gemini", value: "4.0.0 · iOS")
+                    LabeledContent("VPN Gemini", value: "4.0.1 · iOS")
                     Text("Проверяет доступ к веб-версии Gemini через каждый сервер. Показывает регион Google и время защищённого соединения. При сетевой ошибке Hysteria2 пробует совместимый режим.")
                     Text("Конфигурации, HWID, результаты и журнал хранятся в памяти сеанса. В файл попадает только экспорт, который ты создашь сам.")
                     NavigationLink("Открытые компоненты") { NoticesView() }

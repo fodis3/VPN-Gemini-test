@@ -55,14 +55,15 @@ jobs:
           import plistlib
           p=plistlib.load(open('build/VPNGemini.xcarchive/Products/Applications/VPNGemini.app/Info.plist','rb'))
           assert p['CFBundleIdentifier']=='ru.vpngemini.ios'
-          assert p['CFBundleShortVersionString']=='4.0.0'
-          assert p['CFBundleVersion']=='40000'
-          print('Verified bundle version 4.0.0 (40000)')
+          assert p['CFBundleShortVersionString']=='4.0.1'
+          assert p['CFBundleVersion']=='40001'
+          assert p['MinimumOSVersion']=='17.0'
+          print('Verified bundle version 4.0.1 (40001), minimum iOS 17.0')
           PY
           mkdir -p build/unsigned/Payload
           cp -R build/VPNGemini.xcarchive/Products/Applications/VPNGemini.app build/unsigned/Payload/
           cd build/unsigned
-          zip -qr ../VPN-Gemini-iOS-4.0.0-unsigned.ipa Payload
+          zip -qr ../VPN-Gemini-iOS-4.0.1-unsigned.ipa Payload
       - name: Select simulator
         id: simulator
         run: |
@@ -75,14 +76,50 @@ jobs:
           PY
       - name: Verify native interface on simulator
         run: |
+          python3 - <<'PY'
+          import subprocess
+          device='${{ steps.simulator.outputs.id }}'
+          subprocess.run(['xcrun','simctl','boot',device],check=False)
+          subprocess.run(['xcrun','simctl','bootstatus',device,'-b'],check=True)
+          subprocess.run(['xcrun','simctl','pbcopy',device],input='vless://00000000-0000-4000-8000-000000000001@127.0.0.1:1?security=tls#Test',text=True,check=True)
+          PY
           xcodebuild test -project VPNGemini.xcodeproj -scheme VPNGemini \
             -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}' \
             -resultBundlePath build/UITests.xcresult CODE_SIGNING_ALLOWED=NO
+      - name: Install iOS 18 simulator runtime
+        run: xcodebuild -downloadPlatform iOS -buildVersion 18.5
+      - name: Select legacy simulator
+        id: legacy
+        run: |
+          python3 - <<'PY'
+          import json,subprocess,os
+          runtimes=json.loads(subprocess.check_output(['xcrun','simctl','list','runtimes','--json']))['runtimes']
+          runtime=next(r['identifier'] for r in runtimes if r.get('isAvailable') and r['version'].startswith('18.'))
+          types=json.loads(subprocess.check_output(['xcrun','simctl','list','devicetypes','--json']))['devicetypes']
+          device=next(d['identifier'] for d in types if d['name']=='iPhone 16 Pro')
+          udid=subprocess.check_output(['xcrun','simctl','create','VPN Gemini iOS 18',device,runtime],text=True).strip()
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('id='+udid+'\n')
+          PY
+      - name: Verify interface and native tunnel on iOS 18
+        run: |
+          python3 - <<'PY'
+          import subprocess
+          device='${{ steps.legacy.outputs.id }}'
+          subprocess.run(['xcrun','simctl','boot',device],check=False)
+          subprocess.run(['xcrun','simctl','bootstatus',device,'-b'],check=True)
+          subprocess.run(['xcrun','simctl','pbcopy',device],input='vless://00000000-0000-4000-8000-000000000001@127.0.0.1:1?security=tls#Test',text=True,check=True)
+          PY
+          xcodebuild test -project VPNGemini.xcodeproj -scheme VPNGemini \
+            -destination 'platform=iOS Simulator,id=${{ steps.legacy.outputs.id }}' \
+            -resultBundlePath build/LegacyUITests.xcresult CODE_SIGNING_ALLOWED=NO
       - name: Export screenshots
         if: always()
         run: |
           if [ -d build/UITests.xcresult ]; then
             xcrun xcresulttool export attachments --path build/UITests.xcresult --output-path build/screenshots
+          fi
+          if [ -d build/LegacyUITests.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/LegacyUITests.xcresult --output-path build/screenshots-ios18
           fi
       - name: Sign archive (optional)
         if: github.event_name == 'workflow_dispatch' && inputs.signed
@@ -95,9 +132,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: VPN-Gemini-iOS-4.0.0
+          name: VPN-Gemini-iOS-4.0.1
           path: |
             build/*.ipa
             build/screenshots/
             build/UITests.xcresult/
+            build/screenshots-ios18/
+            build/LegacyUITests.xcresult/
           if-no-files-found: warn

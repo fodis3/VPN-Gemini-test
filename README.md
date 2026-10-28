@@ -34,7 +34,7 @@ HTTPS-запрос к Gemini через созданный туннель. До�
 | Платформа | Версия | Дизайн | Скачать |
 | --- | --- | --- | --- |
 | Android 8.0+, ARMv7 / ARM64 / x86_64 | 4.0.7 | Material 3 Expressive | [APK и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/v4.0.7) |
-| iPhone / iPad, iOS 26+ | 4.0.0 | Liquid Glass, SwiftUI | [IPA и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/ios-v4.0.0) |
+| iPhone / iPad, iOS 17+ | 4.0.1 | SwiftUI; Liquid Glass на iOS 26 | [IPA и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/ios-v4.0.1) |
 | Windows x86 / x64 | 4.0.1 | Fluent Design, PySide6 | [EXE и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/windows-v4.0.1) |
 
 **Android:** выберите APK по архитектуре: `armeabi-v7a` для 32-битных ARM,
@@ -45,6 +45,7 @@ HTTPS-запрос к Gemini через созданный туннель. До�
 **iPhone / iPad:** IPA не подписан. Для установки потребуется подпись вашим
 сертификатом Apple или самостоятельная переподпись. Это не готовая публикация
 в App Store. Сборка выполняется на macOS через GitHub Actions.
+На iOS 17–18 используется стандартный системный интерфейс, на iOS 26 — Liquid Glass.
 При сворачивании приложения iOS активная очередь проверок останавливается.
 
 **Windows:** скачайте и запустите EXE; Python, Qt и отдельная установка ядер
@@ -70,7 +71,7 @@ EXE не подписан сертификатом издателя. В x86 ис
 - **iOS:** каталог [`ios/`](ios), SwiftUI и единый Go-модуль с Xray / sing-box.
   [Документация](ios/README.md), [проверка сборки](ios/VERIFICATION.md).
   [Отдельный репозиторий со сборкой GitHub Actions](https://github.com/fodis3/test-vpn-ios).
-- **Windows:** каталог [`windows/`](windows), Python и PySide6.
+- **Windows:** каталог [`windows/`](windows), Python, PySide6 / PySide2.
   [Сборка и запуск](windows/README.md).
 
 ## Лицензия
@@ -83,3 +84,9 @@ AndroidX, Kotlin и OkHttp — Apache-2.0.
 [Лицензии и ссылки на исходники компонентов](app/src/main/assets/licenses).
 
 Независимый проект, не связанный с Google. Gemini — продукт Google.
+
+## Интерфейс на iOS 18.5
+
+Реальные скриншоты симулятора:
+
+<p><img src="ios/preview/ios18/01-check.png" width="240" alt="Главный экран, iOS 18.5"><img src="ios/preview/ios18/05-dark-check.png" width="240" alt="Тёмная тема, iOS 18.5"><img src="ios/preview/ios18/03-settings.png" width="240" alt="Настройки, iOS 18.5"></p>

@@ -8,5 +8,5 @@ export PATH="$(go env GOPATH)/bin:$PATH"
 gomobile init
 mkdir -p ../Frameworks
 # Both cores are linked by the same Go invocation: exactly one Go runtime.
-gomobile bind -target=ios,iossimulator -iosversion=26.0 -tags=with_quic,with_utls \
+gomobile bind -target=ios,iossimulator -iosversion=17.0 -tags=with_quic,with_utls \
   -ldflags='-s -w' -trimpath -o ../Frameworks/GeminiCore.xcframework ./mobile

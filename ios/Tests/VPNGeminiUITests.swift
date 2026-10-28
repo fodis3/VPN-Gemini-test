@@ -22,7 +22,10 @@ final class VPNGeminiUITests: XCTestCase {
         let editor = app.textViews.firstMatch
         XCTAssertTrue(editor.waitForExistence(timeout: 5))
         editor.tap()
-        editor.typeText("vless://00000000-0000-4000-8000-000000000001@127.0.0.1:1?security=tls#Test")
+        editor.press(forDuration: 1.2)
+        let paste = app.descendants(matching: .any).matching(NSPredicate(format: "label == %@ OR label == %@", "Paste", "Вставить")).firstMatch
+        XCTAssertTrue(paste.waitForExistence(timeout: 5))
+        paste.tap()
         if app.buttons["Готово"].exists { app.buttons["Готово"].tap() }
         app.buttons["Импортировать"].tap()
         let resultsTab = app.tabBars.buttons["Результаты"]
@@ -31,7 +34,7 @@ final class VPNGeminiUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Test"].waitForExistence(timeout: 10))
         capture("02-results", app: app)
         app.tabBars.buttons["Настройки"].tap()
-        XCTAssertTrue(app.switches["Тактильный отклик"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any).matching(identifier: "hapticsToggle").firstMatch.waitForExistence(timeout: 5))
         capture("03-settings", app: app)
         app.tabBars.buttons["Проверка"].tap()
         app.buttons["Добавить конфигурации"].tap()

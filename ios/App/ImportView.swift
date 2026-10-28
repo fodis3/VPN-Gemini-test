@@ -28,7 +28,7 @@ struct ImportView: View {
                     Section {
                         TextField("HWID, если требуется", text: $hwid).textInputAutocapitalization(.never)
                             .autocorrectionDisabled().focused($focused, equals: .hwid).privacySensitive()
-                        Button("Сгенерировать HWID", systemImage: "arrow.trianglehead.2.clockwise") {
+                        Button("Сгенерировать HWID", systemImage: "arrow.triangle.2.circlepath") {
                             hwid = UUID().uuidString.uppercased(); store.feedback()
                         }
                     } header: { Text("Идентификатор устройства") } footer: {
