@@ -1,0 +1,32 @@
+name: Android ARMv7 Xray core
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  core:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.8'
+          cache: false
+      - name: Build pinned Xray for Android ARMv7
+        run: |
+          git clone --depth 1 --branch v26.3.27 https://github.com/XTLS/Xray-core.git xray
+          cd xray
+          git rev-parse HEAD > ../SOURCE-COMMIT.txt
+          export GOOS=android GOARCH=arm GOARM=7 CGO_ENABLED=1
+          export CC="$ANDROID_NDK_LATEST_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi26-clang"
+          go build -trimpath -buildvcs=false -ldflags='-s -w' -o ../libxray.so ./main
+          cd ..
+          sha256sum libxray.so > SHA256SUMS
+          file libxray.so
+          readelf -h libxray.so
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xray-26.3.27-android-armeabi-v7a
+          path: |
+            libxray.so
+            SHA256SUMS
+            SOURCE-COMMIT.txt
