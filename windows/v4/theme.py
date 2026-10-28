@@ -1,6 +1,6 @@
 """Windows Fluent geometry: 4px controls, 8px surfaces, 14px body type."""
 from fluent import ASSETS
-from PySide6.QtGui import QColor
+from qt_compat.QtGui import QColor
 
 
 def flatten(foreground, background, opacity):

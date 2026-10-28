@@ -6,6 +6,8 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+import struct
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / 'v2'), str(ROOT / 'v4')]
@@ -21,6 +23,22 @@ def b64(text):
 
 
 class Imports(unittest.TestCase):
+    def test_frozen_core_cache_is_architecture_specific(self):
+        import v2_xray
+        arch = 'x86' if struct.calcsize('P') == 4 else 'x64'
+        other = 'x64' if arch == 'x86' else 'x86'
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name, finder in [('xray.exe', v2_xray._get_xray_path), ('sing-box.exe', v2_xray._get_singbox_path)]:
+                expected = root / 'bin' / arch / name
+                expected.parent.mkdir(parents=True, exist_ok=True)
+                expected.write_bytes(b'correct architecture')
+                wrong = root / 'bin' / other / name
+                wrong.parent.mkdir(parents=True, exist_ok=True)
+                wrong.write_bytes(b'wrong architecture')
+                with patch.object(sys, 'frozen', True, create=True), patch.object(sys, 'executable', str(root / 'app.exe')):
+                    self.assertEqual(Path(finder()), expected)
+
     def test_eighty_records_keep_five_unsupported_entries(self):
         valid = [f'vless://{UUID}@s{i}.example:443?security=tls#Server{i}' for i in range(75)]
         unsupported = [f'ssr://unrecognized{i}#Unsupported{i}' for i in range(5)]
@@ -83,7 +101,7 @@ class Imports(unittest.TestCase):
             with tempfile.TemporaryDirectory() as temp:
                 path = Path(temp) / 'cfg.json'
                 path.write_text(json.dumps(build_xray_config(case, 16000)), encoding='utf-8')
-                result = subprocess.run([str(ROOT / 'bin' / 'xray.exe'), 'run', '-test', '-c', str(path)],
+                result = subprocess.run([str(ROOT / 'bin' / ('x86' if __import__('struct').calcsize('P') == 4 else 'x64') / 'xray.exe'), 'run', '-test', '-c', str(path)],
                                         capture_output=True, timeout=10)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 

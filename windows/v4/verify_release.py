@@ -17,7 +17,7 @@ with tempfile.TemporaryDirectory(prefix='vpn_gemini_4_release_') as temp:
                             timeout=60, capture_output=True)
     assert result.returncode == 0, (result.returncode, result.stderr)
     data = json.loads(report.read_text(encoding='utf-8'))
-    assert data['version'] == '4.0'
+    assert data['version'] == '4.0.1'
     assert data['pages'] == 3
     assert data['fluent_icons'] >= 30, data
     for key in ('xray', 'singbox'):
@@ -29,4 +29,4 @@ with tempfile.TemporaryDirectory(prefix='vpn_gemini_4_release_') as temp:
         'standalone_launch': 'PASS', 'bundled_fluent_icons': data['fluent_icons'], 'bundled_xray': 'PASS',
         'bundled_singbox': 'PASS', 'exit_code': result.returncode,
     }, indent=2), encoding='utf-8')
-    print('Standalone EXE: PASS; 4.0 UI, Qt platform, Xray and sing-box bundled.')
+    print('Standalone EXE: PASS; 4.0.1 UI, Qt platform, Xray and sing-box bundled.')

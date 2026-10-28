@@ -34,6 +34,8 @@ def fetch(spec):
         with tarfile.open(fileobj=io.BytesIO(data), mode='r:gz') as t:
             entry = next(m for m in t.getmembers() if m.isfile() and m.name.endswith('/sing-box'))
             binary = t.extractfile(entry).read()
+    if expected and hashlib.sha256(binary).hexdigest() != expected['binary_sha256']:
+        raise RuntimeError('Binary SHA-256 mismatch')
     assert binary[:4] == b'\x7fELF', 'Not an Android ELF executable'
     dest = ROOT / 'app/src/main/jniLibs' / abi / ('lib' + engine + '.so')
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -41,11 +43,8 @@ def fetch(spec):
     return {'abi': abi, 'engine': engine, 'url': url, 'archive_sha256': hashlib.sha256(data).hexdigest(), 'binary_sha256': hashlib.sha256(binary).hexdigest()}
 
 if __name__ == '__main__':
-    specs = []
-    for abi, xarch, sarch in [('arm64-v8a', 'arm64-v8a', 'arm64'), ('x86_64', 'amd64', 'amd64')]:
-        specs += [(abi, 'xray', f'https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-android-{xarch}.zip', 'xray'),
-                  (abi, 'singbox', f'https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-android-{sarch}.tar.gz', '')]
+    manifest = json.loads((ROOT / 'cores.lock.json').read_text(encoding='utf-8'))
+    specs = [(item['abi'], item['engine'], item['url'], item.get('member', 'xray')) for item in manifest]
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-        manifest = list(pool.map(fetch, specs))
-    (ROOT / 'cores.lock.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-    print('Android cores ready: arm64-v8a, x86_64')
+        list(pool.map(fetch, specs))
+    print('Android cores ready: armeabi-v7a, arm64-v8a, x86_64')

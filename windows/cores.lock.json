@@ -2,11 +2,27 @@
   {
     "name": "xray.exe",
     "url": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-windows-64.zip",
-    "sha256": "15c2d007954ac53ba69b80ec91242786b3c0b71d52649165b4ca1d5cc96ef8f1"
+    "sha256": "15c2d007954ac53ba69b80ec91242786b3c0b71d52649165b4ca1d5cc96ef8f1",
+    "arch": "x64"
   },
   {
     "name": "sing-box.exe",
     "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-windows-amd64.zip",
-    "sha256": "5c19bb3f8c12d4e85b3d47fe63123a7624b314b58dd7a8e32f51004f1c4d2faf"
+    "sha256": "5c19bb3f8c12d4e85b3d47fe63123a7624b314b58dd7a8e32f51004f1c4d2faf",
+    "arch": "x64"
+  },
+  {
+    "name": "xray.exe",
+    "arch": "x86",
+    "url": "https://github.com/XTLS/Xray-core/releases/download/v26.3.27/Xray-windows-32.zip",
+    "archive_sha256": "956a5ec00bce747c7936dc4ff7ac570df1c8030b0a4a8640f843488365084db3",
+    "sha256": "5ec03c31ef3037f9b7284f197d858cb874ccf2e0c9897d6ea25a8595e5d1d4c4"
+  },
+  {
+    "name": "sing-box.exe",
+    "arch": "x86",
+    "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-windows-386.zip",
+    "archive_sha256": "8706eeca87cbca2fc9eee704948e8b5a27ea66056fedac0caa063ccedf1acab5",
+    "sha256": "9091bc68a2ac86f75602456268e3db58b675068c7b3a0110051b762544587c17"
   }
 ]

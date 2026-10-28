@@ -10,6 +10,7 @@ import os
 import sys
 import subprocess
 import socket
+import struct
 import time
 import random
 import threading
@@ -57,7 +58,7 @@ def _get_xray_path() -> str:
     """
     if getattr(sys, "frozen", False):
         exe_dir = os.path.dirname(sys.executable)
-        persistent_bin = os.path.join(exe_dir, "bin", "xray.exe")
+        persistent_bin = os.path.join(exe_dir, "bin", "x86" if struct.calcsize("P") == 4 else "x64", "xray.exe")
 
         # Уже есть постоянная копия — используем её
         if os.path.isfile(persistent_bin):
@@ -72,7 +73,7 @@ def _get_xray_path() -> str:
 
             if os.path.isfile(meipass_xray):
                 try:
-                    os.makedirs(os.path.join(exe_dir, "bin"), exist_ok=True)
+                    os.makedirs(os.path.dirname(persistent_bin), exist_ok=True)
                     import shutil
                     shutil.copy2(meipass_xray, persistent_bin)
                     return persistent_bin
@@ -90,6 +91,7 @@ def _get_xray_path() -> str:
         here = os.path.dirname(os.path.abspath(__file__))
         root = os.path.dirname(here)
         candidates = [
+            os.path.join(root, "bin", "x86" if struct.calcsize("P") == 4 else "x64", "xray.exe"),
             os.path.join(root, "bin", "xray.exe"),
             os.path.join(here, "bin", "xray.exe"),
             os.path.join(here, "xray.exe"),
@@ -110,7 +112,7 @@ def _get_singbox_path() -> Optional[str]:
     """
     if getattr(sys, "frozen", False):
         exe_dir = os.path.dirname(sys.executable)
-        persistent_bin = os.path.join(exe_dir, "bin", "sing-box.exe")
+        persistent_bin = os.path.join(exe_dir, "bin", "x86" if struct.calcsize("P") == 4 else "x64", "sing-box.exe")
 
         if os.path.isfile(persistent_bin):
             return persistent_bin
@@ -123,7 +125,7 @@ def _get_singbox_path() -> Optional[str]:
 
             if os.path.isfile(meipass_sb):
                 try:
-                    os.makedirs(os.path.join(exe_dir, "bin"), exist_ok=True)
+                    os.makedirs(os.path.dirname(persistent_bin), exist_ok=True)
                     import shutil
                     shutil.copy2(meipass_sb, persistent_bin)
                     return persistent_bin
@@ -135,6 +137,7 @@ def _get_singbox_path() -> Optional[str]:
         here = os.path.dirname(os.path.abspath(__file__))
         root = os.path.dirname(here)
         candidates = [
+            os.path.join(root, "bin", "x86" if struct.calcsize("P") == 4 else "x64", "sing-box.exe"),
             os.path.join(root, "bin", "sing-box.exe"),
             os.path.join(here, "bin", "sing-box.exe"),
             os.path.join(here, "sing-box.exe"),

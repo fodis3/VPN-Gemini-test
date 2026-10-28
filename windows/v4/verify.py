@@ -12,9 +12,9 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path[:0] = [str(ROOT / 'v2'), str(ROOT / 'v4')]
-from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import QSettings, Qt
-from PySide6.QtTest import QTest
+from qt_compat.QtWidgets import QApplication
+from qt_compat.QtCore import QSettings, Qt
+from qt_compat.QtTest import QTest
 import engine
 import app as ui
 from v2_parser import parse_text_block
@@ -91,7 +91,7 @@ class Checks(unittest.TestCase):
 
     def test_fluent_icons_navigation_and_keyboard_switch(self):
         from fluent import ASSETS
-        from PySide6.QtSvg import QSvgRenderer
+        from qt_compat.QtSvg import QSvgRenderer
         icons = list((ASSETS / 'icons').glob('*.svg'))
         self.assertGreaterEqual(len(icons), 30)
         for path in icons:

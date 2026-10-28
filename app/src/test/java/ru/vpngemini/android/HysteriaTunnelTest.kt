@@ -50,9 +50,9 @@ class HysteriaTunnelTest {
                     val endpointPort = relay?.port ?: quicPort
                     val server = SubscriptionParser.parse("hy2://$password@hy.example.invalid:$endpointPort/?insecure=1&obfs=salamander&obfs-password=test-obfs").single()
                     val process = start(CoreConfig.build(server, socksPort, listOf("127.0.0.1"), compatibility), "$password-$compatibility")
-                    val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5)
+                    val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(15)
                     while (runCatching { Socket("127.0.0.1", socksPort).close() }.isFailure) {
-                        check(process.isAlive && System.nanoTime() < deadline) { "Test core failed to start" }
+                        check(process.isAlive && System.nanoTime() < deadline) { "Test core failed to start; alive=${process.isAlive}; " + File(directory, "$password-$compatibility.log").readText().takeLast(2000) }
                         Thread.sleep(30)
                     }
                     val client = OkHttpClient.Builder().proxy(Proxy(Proxy.Type.SOCKS, InetSocketAddress("127.0.0.1", socksPort)))

@@ -26,5 +26,22 @@
     "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-android-amd64.tar.gz",
     "archive_sha256": "a84a5aea86ad0588b76e23051e9e59405a7ed52358acfb9710cfaa055fe60e4a",
     "binary_sha256": "25f975c79ea43cafdcf91edfa423cda6ed6d412bc82ca880d458cd1e60f490c5"
+  },
+  {
+    "abi": "armeabi-v7a",
+    "engine": "xray",
+    "url": "https://github.com/fodis3/VPN-Gemini-test/releases/download/v4.0.7/xray-26.3.27-android-armeabi-v7a.zip",
+    "archive_sha256": "22cc7621c73a4ac5eb562c045ef6c8d69e39c8f6db477246a5b8c2d89375a697",
+    "binary_sha256": "3cbc1f780f9a5c572e8f4241baaffa327e9cfa61854ddf2a014a812f078855fc",
+    "member": "libxray.so",
+    "source_commit": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "build_workflow": "https://github.com/fodis3/VPN-Gemini-test/actions/runs/40663729289"
+  },
+  {
+    "abi": "armeabi-v7a",
+    "engine": "singbox",
+    "url": "https://github.com/SagerNet/sing-box/releases/download/v1.14.3/sing-box-1.14.3-android-arm.tar.gz",
+    "archive_sha256": "0c0df4fbf85656896d5b604e9eb4e556c1a3f68dd615b0ece3f9f6bd5adab5d6",
+    "binary_sha256": "3748b66bd4e55ecfda8002fbbcc2051fa43bd20b44f0fb60e2102112a7ea4c01"
   }
 ]

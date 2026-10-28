@@ -1,7 +1,7 @@
 """Consistent menu columns, using standard QMenu keyboard and action behavior."""
-from PySide6.QtCore import Qt, QRectF, QSize
-from PySide6.QtGui import QPainter, QColor, QPen, QKeySequence
-from PySide6.QtWidgets import QMenu, QPlainTextEdit, QApplication
+from qt_compat.QtCore import Qt, QRectF, QSize
+from qt_compat.QtGui import QPainter, QColor, QPen, QKeySequence
+from qt_compat.QtWidgets import QMenu, QPlainTextEdit, QApplication
 from fluent import icon
 
 

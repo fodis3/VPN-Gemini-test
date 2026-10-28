@@ -2,10 +2,10 @@
 from functools import lru_cache
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QSize, QRectF, Property, QPropertyAnimation, QEasingCurve
-from PySide6.QtGui import QIcon, QPixmap, QPainter, QColor, QPen
-from PySide6.QtSvg import QSvgRenderer
-from PySide6.QtWidgets import (QApplication, QPushButton, QCheckBox,
+from qt_compat.QtCore import Qt, QSize, QRectF, Property, QPropertyAnimation, QEasingCurve
+from qt_compat.QtGui import QIcon, QPixmap, QPainter, QColor, QPen
+from qt_compat.QtSvg import QSvgRenderer
+from qt_compat.QtWidgets import (QApplication, QPushButton, QCheckBox,
                                QStyledItemDelegate, QStyle, QStyleOptionViewItem)
 
 ASSETS = Path(__file__).resolve().parent / 'assets'

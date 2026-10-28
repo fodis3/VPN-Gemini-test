@@ -19,6 +19,8 @@ args = parser.parse_args()
 version = re.search(r'versionName = "([0-9.]+)"', (root / 'app/build.gradle.kts').read_text(encoding='utf-8')).group(1)
 artifact_name = 'vpn_gemini_android_v' + version.replace('.', '_')
 apk = root / f'app/build/outputs/apk/{args.variant}/app-{args.variant}.apk'
+if args.variant == 'release' and (apk.parent / 'app-universal-release.apk').exists():
+    apk = apk.parent / 'app-universal-release.apk'
 results = root / 'app/build/test-results/testDebugUnitTest'
 count = 0
 for report in results.glob('TEST-*.xml'):
@@ -63,4 +65,4 @@ with zipfile.ZipFile(workspace / (artifact_name + '_source.zip'), 'w', zipfile.Z
         z.write(path, Path('android') / relative)
 sha = hashlib.sha256(dest.read_bytes()).hexdigest()
 (workspace / (artifact_name + '.apk.sha256')).write_text(sha + '  ' + dest.name + '\n', encoding='ascii')
-print(f'Packaged {dest.name}: {dest.stat().st_size / 1024 / 1024:.1f} MiB; {count} tests; all four native core hashes match.')
+print(f'Packaged {dest.name}: {dest.stat().st_size / 1024 / 1024:.1f} MiB; {count} tests; all pinned native core hashes match.')

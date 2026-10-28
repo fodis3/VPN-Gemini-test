@@ -7,9 +7,9 @@ android {
         applicationId = "ru.vpngemini.android"
         minSdk = 26
         targetSdk = 36
-        versionCode = 40006
-        versionName = "4.0.6"
-        ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
+        versionCode = 40007
+        versionName = "4.0.7"
+        ndk { abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64") }
     }
     signingConfigs {
         val keystorePath = providers.environmentVariable("VPN_GEMINI_KEYSTORE").orNull
@@ -26,6 +26,14 @@ android {
         release {
             signingConfig = signingConfigs.findByName("distribution")
             isMinifyEnabled = false
+        }
+    }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+            isUniversalApk = true
         }
     }
     buildFeatures { compose = true; buildConfig = true }

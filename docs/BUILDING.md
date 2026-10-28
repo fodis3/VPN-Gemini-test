@@ -39,7 +39,7 @@ Xray 26.3.27 и sing-box 1.14.3 запускаются как отдельные
 ```
 
 На Windows используйте `gradlew.bat`. Результат:
-`app/build/outputs/apk/release/app-release.apk`.
+`app/build/outputs/apk/release/app-universal-release.apk`.
 Без `VPN_GEMINI_KEYSTORE` release APK остаётся неподписанным.
 Ключи и пароли не добавляйте в Git или публичные артефакты.
 Сохраните защищённую резервную копию ключа: все следующие обновления
@@ -77,3 +77,14 @@ SHA-256 сертификата первой release-сборки 4.0.6:
 ```
 
 Это публичный идентификатор сертификата; закрытый ключ не публикуется.
+
+## Android ARMv7 (32 бит)
+
+Сборка создаёт отдельные APK для armeabi-v7a, arm64-v8a и x86_64, а также
+универсальный APK. Минимальная версия Android остаётся 8.0.
+Xray ARMv7 собирается из тега 26.3.27 с Android NDK и Go 1.26.8;
+workflow `.github/workflows/android-arm32-core.yml` содержит параметры сборки.
+Точный commit, хеши и адрес артефакта указаны в `cores.lock.json`.
+sing-box ARMv7 взят из официального архива Android ARM версии 1.14.3.
+ARMv7-ядра проверены по формату ELF32 ARM; физический телефон ARMv7
+в рабочем окружении не подключён.

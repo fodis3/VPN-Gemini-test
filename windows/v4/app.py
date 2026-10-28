@@ -1,4 +1,5 @@
-"""VPN Gemini 4.0 — Fluent desktop application."""
+"""VPN Gemini 4.0.1 — Fluent desktop application."""
+from qt_compat import QT6, system_dark
 import csv
 import ctypes
 import sys
@@ -6,11 +7,11 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import (Qt, Signal, QObject, QThread, QTimer, QSettings, QSize,
+from qt_compat.QtCore import (Qt, Signal, QObject, QThread, QTimer, QSettings, QSize,
                             QPropertyAnimation, QEasingCurve, QSortFilterProxyModel, QUrl)
-from PySide6.QtGui import (QColor, QFont, QIcon, QPainter, QPixmap, QStandardItem,
+from qt_compat.QtGui import (QColor, QFont, QIcon, QPainter, QPixmap, QStandardItem,
                            QStandardItemModel, QDesktopServices, QLinearGradient, QFontDatabase, QAction)
-from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QFrame, QLabel,
+from qt_compat.QtWidgets import (QApplication, QMainWindow, QWidget, QFrame, QLabel,
     QPushButton, QVBoxLayout, QHBoxLayout, QGridLayout, QLineEdit, QPlainTextEdit,
     QComboBox, QSpinBox, QCheckBox, QStackedWidget, QProgressBar, QTableView,
     QHeaderView, QFileDialog, QGraphicsOpacityEffect, QScrollArea,
@@ -24,7 +25,7 @@ from engine import TestResult, run_batch_test
 from v2_parser import parse_text_block
 from v2_subscription import fetch_subscription, generate_hwid
 
-VERSION = '4.0'
+VERSION = '4.0.1'
 STATUS = {'PENDING': 'В очереди', 'TESTING': 'Проверка', 'OK': 'Доступен',
           'BLOCKED': 'Блокировка', 'ERROR': 'Ошибка', 'TIMEOUT': 'Таймаут',
           'CANCELLED': 'Отменён'}
@@ -126,7 +127,7 @@ class MainWindow(QMainWindow):
     def __init__(self, settings=None):
         super().__init__()
         self.settings = settings or QSettings('VPNGemini', 'Fluent4')
-        self.setWindowTitle('VPN Gemini · 4.0')
+        self.setWindowTitle('VPN Gemini · 4.0.1')
         self.setWindowIcon(app_icon())
         self.resize(1440, 940)
         self.setMinimumSize(1200, 760)
@@ -154,7 +155,7 @@ class MainWindow(QMainWindow):
         self.accent_timer.setInterval(2000)
         self.accent_timer.timeout.connect(self.refresh_system_accent)
         self.accent_timer.start()
-        self.log('VPN Gemini 4.0 готов к работе. Добавьте конфигурации для проверки.')
+        self.log('VPN Gemini 4.0.1 готов к работе. Добавьте конфигурации для проверки.')
 
     def build_ui(self):
         root = QWidget()
@@ -194,7 +195,7 @@ class MainWindow(QMainWindow):
             self.nav_buttons.append(b)
         self.nav_buttons[0].setChecked(True)
         nav.addSpacing(16)
-        nav.addWidget(label('    Версия 4.0', 'muted'))
+        nav.addWidget(label('    Версия 4.0.1', 'muted'))
         shell.addWidget(side)
         content = QFrame()
         content.setObjectName('contentPane')
@@ -484,7 +485,7 @@ class MainWindow(QMainWindow):
         inside.addWidget(note)
         col.addWidget(box)
         box, inside = card()
-        inside.addWidget(label('VPN Gemini 4.0', 'section'))
+        inside.addWidget(label('VPN Gemini 4.0.1', 'section'))
         about = label('Пакетная проверка VPN-конфигураций и доступности Google Gemini.\nКлючи и адрес подписки не сохраняются между запусками.\nРезультат отражает сетевую проверку; доступ в аккаунте Google может отличаться.', 'muted')
         about.setWordWrap(True)
         inside.addWidget(about)
@@ -541,7 +542,7 @@ class MainWindow(QMainWindow):
 
     def apply_theme(self):
         mode = self.theme.currentIndex()
-        self.dark = mode == 1 or (mode == 0 and QApplication.styleHints().colorScheme() == Qt.ColorScheme.Dark)
+        self.dark = mode == 1 or (mode == 0 and system_dark())
         accent = self.accent_palette.fill(self.dark)
         muted = '#b5b5b5' if self.dark else '#626262'
         self.colors = {'OK': '#69d69a' if self.dark else '#107c41',
@@ -899,7 +900,8 @@ def run_gui(smoke_report=None):
     window = MainWindow()
     if smoke_report:
         window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
-    app.styleHints().colorSchemeChanged.connect(lambda _: window.apply_theme())
+    if QT6:
+        app.styleHints().colorSchemeChanged.connect(lambda _: window.apply_theme())
     window.show()
     if smoke_report:
         def report():

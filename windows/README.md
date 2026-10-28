@@ -6,9 +6,12 @@
 
 ## Запуск
 
-Скачайте `vpn_gemini_windows_v4_0_0.exe` из релиза `windows-v4.0.0`.
+Скачайте `vpn_gemini_windows_v4_0_1_x64.exe` или `vpn_gemini_windows_v4_0_1_x86.exe`
+из релиза `windows-v4.0.1`.
 Python и Qt устанавливать не требуется, Xray и sing-box включены.
-Сборка предназначена для Windows x64, проверена в Windows 11.
+Доступны Windows x64 и x86 (32 бит). Сборки проверены в Windows 11 x64;
+x86 запускается через WOW64. Физическая 32-битная ОС отдельно не проверена.
+Минимум — Windows 10; Windows 7 не поддерживается этими версиями ядер.
 EXE не подписан сертификатом издателя.
 
 ## Сборка из исходников
@@ -33,3 +36,12 @@ PySide6 / Qt — LGPL-3.0; исходники и инструкции Qt: https:
 
 CSV содержит исходные конфигурации; храните его как приватные данные.
 Проверка не выполняет вход в Google или генерацию ответа модели.
+
+## Архитектуры
+
+Для x64: Python x64 и `requirements-v4.txt` (PySide6 / Qt 6).
+Для x86: Python 3.10 x86 и `requirements-win32.txt` (PySide2 / Qt 5.15).
+Запускайте `v4_build.py` соответствующим Python. Общий интерфейс и движок
+используют слой `v4/qt_compat`; настройки, темы и анимации сохраняются.
+Ядра загружаются в `bin/x86` и `bin/x64`, их SHA-256 закреплены в `cores.lock.json`.
+PySide2 / Qt 5.15 сохраняют LGPL-лицензию; исходники: https://code.qt.io/cgit/pyside/pyside-setup.git/?h=5.15.2 и https://code.qt.io/cgit/qt/qtbase.git/?h=5.15.2 .

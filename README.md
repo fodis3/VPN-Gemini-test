@@ -33,11 +33,13 @@ HTTPS-запрос к Gemini через созданный туннель. До�
 
 | Платформа | Версия | Дизайн | Скачать |
 | --- | --- | --- | --- |
-| Android 8.0+, ARM64 / x86_64 | 4.0.6 | Material 3 Expressive | [APK и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/v4.0.6) |
+| Android 8.0+, ARMv7 / ARM64 / x86_64 | 4.0.7 | Material 3 Expressive | [APK и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/v4.0.7) |
 | iPhone / iPad, iOS 26+ | 4.0.0 | Liquid Glass, SwiftUI | [IPA и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/ios-v4.0.0) |
-| Windows x64 | 4.0.0 | Fluent Design, PySide6 | [EXE и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/windows-v4.0.0) |
+| Windows x86 / x64 | 4.0.1 | Fluent Design, PySide6 | [EXE и исходники](https://github.com/fodis3/VPN-Gemini-test/releases/tag/windows-v4.0.1) |
 
-**Android:** установите APK. Версия 4.0.6 подписана постоянным ключом выпуска.
+**Android:** выберите APK по архитектуре: `armeabi-v7a` для 32-битных ARM,
+`arm64-v8a` для 64-битных ARM, `x86_64` для Intel/AMD.
+Сборки подписаны одним постоянным ключом выпуска.
 Переход с debug-сборки 4.0.5 требует удаления прежней установки.
 
 **iPhone / iPad:** IPA не подписан. Для установки потребуется подпись вашим
@@ -46,7 +48,8 @@ HTTPS-запрос к Gemini через созданный туннель. До�
 При сворачивании приложения iOS активная очередь проверок останавливается.
 
 **Windows:** скачайте и запустите EXE; Python, Qt и отдельная установка ядер
-не требуются. EXE не подписан сертификатом издателя.
+не требуются. Для 32-битной Windows выбирайте файл `x86`, для 64-битной — `x64`.
+EXE не подписан сертификатом издателя. В x86 используется Qt 5.15, в x64 — Qt 6.
 
 У платформ независимые версии и интерфейсы; набор отдельных функций отличается.
 Во всех клиентах проверяется ответ Gemini через конфигурацию сервера.
